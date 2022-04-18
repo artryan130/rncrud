@@ -12,6 +12,8 @@ export default props => {
                 key={user.id}
                 title={user.name}
                 subtitle={user.email}
+                bottomDivider
+                onPress={() => props.navigation.navigate('UserForm')}
             />
         )
     }
