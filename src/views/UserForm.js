@@ -1,7 +1,8 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React, { useState } from "react";
 import {Text, View, TextInput, StyleSheet, Button } from "react-native";
 
-export default ({route, navitagion}) => {
+export default ({route, navigation}) => {
     const [user, setUser] = useState(route.params ? route.params : {})
     return (
         <View style={style.form}>
@@ -28,9 +29,7 @@ export default ({route, navitagion}) => {
                 />
                 <Button 
                     title="Salvar"
-                    onPress={() => {
-                        navitagion.goBack()
-                    }}
+                    onPress={() => navigation.goBack()}
                 />
         </View>
     )
