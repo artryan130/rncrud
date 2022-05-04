@@ -1,16 +1,22 @@
-import React from "react";
-import {FlatList, View, Text, Alert} from "react-native";
-import { Button, Icon, ListItem } from "react-native-elements";
-import users from '../data/users'
+import React, { useContext } from "react";
+import {FlatList, View, Alert} from "react-native";
+import { Avatar, Button, Icon, ListItem } from "react-native-elements";
+import UsersContext from "../context/UsersContext";
 
 export default props => {
+
+
+    const { state, dispatch } = useContext(UsersContext)
 
     function confirmUserDelete(user) {
         Alert.alert('Excluir usuário', 'Deseja excluir o usuário?', [
             {
                 text: 'Sim',
                 onPress() {
-                    console.warn('delete')
+                    dispatch({
+                        type: 'deleteUser',
+                        payload: user, 
+                    })
                 }
             },
             {
@@ -19,7 +25,7 @@ export default props => {
         ])
     } 
 
-    function getActions(user) {
+    function Actions(user) {
         return (
             <>
                 <Button
@@ -37,20 +43,18 @@ export default props => {
         )
     }
 
-
-
-
     function getUserItem( { item:user } ) {
         return (
             <ListItem 
-                leftAvatar={{source: {uri: user.avatarUrl}}}
-                key={user.id}
-                title={user.name}
-                subtitle={user.email}
-                bottomDivider
-                rightElement={getActions(user)}
-                onPress={() => props.navigation.navigate('UserForm', user)}
-            />
+                onPress={() => props.navigation.navigate('UserForm', user)} 
+                bottomDivider>
+                <Avatar source={{uri: user.avatarUrl}} size={40}/>
+                <ListItem.Content>
+                    <ListItem.Title>{user.name}</ListItem.Title>
+                    <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
+                </ListItem.Content>
+                <Actions user={user} />
+            </ListItem>
         )
     }
 
@@ -58,7 +62,7 @@ export default props => {
         <View>
             <FlatList
                 keyExtractor={user => user.id.toString()}
-                data={users}
+                data={state.users}
                 renderItem={getUserItem}
             />
         </View>
